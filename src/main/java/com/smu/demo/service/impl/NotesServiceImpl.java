@@ -1,5 +1,6 @@
 package com.smu.demo.service.impl;
 
+import com.smu.demo.exceptions.SaveNotesError;
 import com.smu.demo.model.NotesDetail;
 import com.smu.demo.model.NotesHeader;
 import com.smu.demo.repository.NotesHeaderRepository;
@@ -29,15 +30,23 @@ public class NotesServiceImpl implements NotesService {
 
     @Override
     @Transactional
-    public void saveNewNotes(String title, String content) {
+    public void saveNewNotes(String title, String content) throws SaveNotesError {
         NotesDetail detail = new NotesDetail();
         detail.setContent(content);
 
         NotesHeader header = new NotesHeader();
         header.setName(title);
-        header.setDetail(detail);
 
-        this.headerRepository.save(header);
+        //set both references of header and detail
+        header.setDetail(detail);
+        detail.setHeader(header);
+
+        try {
+            this.headerRepository.save(header);
+        }catch (Exception ex){
+            ex.printStackTrace();
+            throw new SaveNotesError("Gagal menyimpan data");
+        }
 
     }
 }

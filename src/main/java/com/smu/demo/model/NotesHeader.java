@@ -18,7 +18,7 @@ public class NotesHeader {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "created_at", nullable = false, updatable = false, insertable = false)
+    @Column(name = "created_at", nullable = false, updatable = false)
     @CreationTimestamp
     private Date createdAt;
 
